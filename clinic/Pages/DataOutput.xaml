@@ -18,42 +18,200 @@
             <RowDefinition Height ="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="10">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Поиск" FontSize="14" FontWeight="Bold"/>
-                <TextBox TextWrapping="Wrap" Width="200" Height="24" Margin="70,0,0,0"/>
-            </StackPanel>
-
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <TextBlock Text="Сортировка" FontSize="14" FontWeight="Bold"/>
-                <ComboBox Width="200" Height="24" Margin="31,0,0,0"/>
+                <ComboBox x:Name="ComboSort" Width="200" Height="24" Margin="31,0,0,0" FontSize="14" SelectionChanged="ComboSort_SelectionChanged">
+                    <ComboBoxItem Content="Не сортировать"/>
+                    <ComboBoxItem Content="По дате"/>
+                    <ComboBoxItem Content="По статусу"/>
+                </ComboBox>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <TextBlock Text="Фильтрация" FontSize="14" FontWeight="Bold"/>
-                <ComboBox Width="200" Height="24" Margin="28,0,0,0"/>
+                <ComboBox x:Name="ComboFilter" Width="200" Height="24" Margin="28,0,0,0" FontSize="14" SelectionChanged="ComboFilter_SelectionChanged">
+                    <ComboBoxItem Content="Все записи"/>
+                    <ComboBoxItem Content="Отменённые"/>
+                    <ComboBoxItem Content="Завершенные"/>
+                    <ComboBoxItem Content="Ожидаемые"/>
+                </ComboBox>
             </StackPanel>
         </StackPanel>
+
         <ListView x:Name="listReceptions" Grid.Row="1" ToolTip="Список приёмов" Background="#ffdbd6">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <WrapPanel>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="200"/>
-                                <ColumnDefinition Width="500"/>
-                                <ColumnDefinition Width="200"/>
-                            </Grid.ColumnDefinitions>
-                            <!--<Image Grid.Column="0" Source="{Binding CurrentPhoto}"></Image>-->
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="5" Grid.Column="1">
-                                <TextBlock Width="auto" TextWrapping="Wrap" Height="auto" Text="{Binding id_reception}" FontWeight="Bold" FontSize="16" Foreground="#FF0027FF"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Grid.Column="2" Margin="5">
-                                
-                            </StackPanel>
-                        </Grid>
-                    </WrapPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Пациент" Width="250">
+                        <GridViewColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Пациент" 
+                       FontSize="14" 
+                       FontWeight="Bold"/>
+                            </DataTemplate>
+                        </GridViewColumn.HeaderTemplate>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding patients.first_name}" 
+                          Margin="0,0,3,0" 
+                          FontSize="14"/>
+                                    <TextBlock Text="{Binding patients.last_name}" 
+                          Margin="0,0,3,0" 
+                          FontSize="14"/>
+                                    <TextBlock Text="{Binding patients.middle_name}" 
+                          FontSize="14"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Врач" Width="250">
+                        <GridViewColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Врач" 
+                       FontSize="14" 
+                       FontWeight="Bold"/>
+                            </DataTemplate>
+                        </GridViewColumn.HeaderTemplate>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding doctors.first_name}" 
+                          Margin="0,0,3,0" 
+                          FontSize="14"/>
+                                    <TextBlock Text="{Binding doctors.last_name}" 
+                          Margin="0,0,3,0" 
+                          FontSize="14"/>
+                                    <TextBlock Text="{Binding doctors.middle_name}" 
+                          FontSize="14"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Дата" Width="100">
+                        <GridViewColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Дата" 
+                       FontSize="14" 
+                       FontWeight="Bold"/>
+                            </DataTemplate>
+                        </GridViewColumn.HeaderTemplate>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding date_reception, StringFormat=d}" 
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Время" Width="80">
+                        <GridViewColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Время" 
+                       FontSize="14" 
+                       FontWeight="Bold"/>
+                            </DataTemplate>
+                        </GridViewColumn.HeaderTemplate>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding time_reception, StringFormat=t}" 
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Статус" Width="120">
+                        <GridViewColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Статус" 
+                       FontSize="14" 
+                       FontWeight="Bold"/>
+                            </DataTemplate>
+                        </GridViewColumn.HeaderTemplate>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding status.status_name}" 
+                       FontSize="14"
+                       VerticalAlignment="Center">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="Black"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding status.status_name}" Value="Отменён">
+                                                    <Setter Property="Foreground" Value="Red"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding status.status_name}" Value="Завершен">
+                                                    <Setter Property="Foreground" Value="DarkGreen"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding status.status_name}" Value="Ожидается">
+                                                    <Setter Property="Foreground" Value="Gold"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Симптомы" Width="200">
+                        <GridViewColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Симптомы" 
+                       FontSize="14" 
+                       FontWeight="Bold"/>
+                            </DataTemplate>
+                        </GridViewColumn.HeaderTemplate>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding symptoms}" 
+                       FontSize="14"
+                       VerticalAlignment="Center"
+                       TextWrapping="Wrap"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Диагноз" Width="120">
+                        <GridViewColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Диагноз" 
+                       FontSize="14" 
+                       FontWeight="Bold"/>
+                            </DataTemplate>
+                        </GridViewColumn.HeaderTemplate>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding diagnosis.diagnosis_name}" 
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Лечение" Width="200">
+                        <GridViewColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Лечение" 
+                       FontSize="14" 
+                       FontWeight="Bold"/>
+                            </DataTemplate>
+                        </GridViewColumn.HeaderTemplate>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding treatment}" 
+                       FontSize="14"
+                       VerticalAlignment="Center"
+                       TextWrapping="Wrap"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                </GridView>
+            </ListView.View>
         </ListView>
         <Grid Grid.Row="2" Margin="10">
             <Grid.ColumnDefinitions>
@@ -62,7 +220,8 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Button Content="Добавить" Width="120" Height="24" Click="AddButton_Click" ToolTip="Добавить" Grid.Column="0" HorizontalAlignment="Left" FontSize="14"/>
-            <!--<TextBlock x:Name="TextFoundCount" Text="Найдено: 0" Margin="10,0,0,0" VerticalAlignment="Center" Grid.Column="2"/>-->
+            <Button Content="Редактировать" Width="120" Height="24" Click="EditButton_Click" ToolTip="Редактировать" Grid.Column="1" HorizontalAlignment="Left" FontSize="14" Margin="10,0,0,0"/>
+            <TextBlock x:Name="TextFoundCount" Text="Найдено: 0" Margin="10,0,0,0" VerticalAlignment="Center" Grid.Column="2"/>
         </Grid>
     </Grid>
 </Page>

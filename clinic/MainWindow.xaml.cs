@@ -28,7 +28,7 @@ namespace clinic
             Applications.AppConnect.model01 = new ApplicationData.clinicEntities();
 
             Applications.AppFrame.frmMain2 = frameMain;
-            frameMain.Navigate(new Pages.Autorization());
+            frameMain.Navigate(new Pages.DataOutput());
         }
     }
 }

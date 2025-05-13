@@ -29,10 +29,9 @@ namespace clinic.Pages
             ButtonRegist.IsEnabled = false;
 
             var specializations = AppConnect.model01.specializations.ToList();
-            foreach (var specialization in specializations)
-            {
-                ComboBoxSpecializations.Items.Add(new ComboBoxItem { Content = specialization.specialization_name });
-            }
+            ComboBoxSpecializations.ItemsSource = specializations;
+            ComboBoxSpecializations.DisplayMemberPath = "specialization_name";
+            ComboBoxSpecializations.SelectedValuePath = "id";
         }
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
@@ -51,65 +50,80 @@ namespace clinic.Pages
         }
         private void ButtonRegist_Click(object sender, RoutedEventArgs e)
         {
+
             string first_name = TBName.Text;
             string last_name = TBSurname.Text;
             string middle_name = TBMiddleName.Text;
+            var selectedSpecialization = ComboBoxSpecializations.SelectedItem as specializations;
             string telephone = TBTelephone.Text;
-            //роль
             string login = TBLogin.Text;
             string password = TBPassword.Text;
             string passwordRepeat = PBpassword.Password;
 
+            if (string.IsNullOrWhiteSpace(first_name) ||
+                string.IsNullOrWhiteSpace(last_name) ||
+                string.IsNullOrWhiteSpace(telephone) ||
+                string.IsNullOrWhiteSpace(login) ||
+                string.IsNullOrWhiteSpace(password) ||
+                string.IsNullOrWhiteSpace(passwordRepeat) ||
+                selectedSpecialization == null)
+            {
+                MessageBox.Show("Пожалуйста, заполните все обязательные поля.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
+            if (password != passwordRepeat)
+            {
+                MessageBox.Show("Пароли не совпадают!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
-            //if (string.IsNullOrWhiteSpace(authorName) ||
-            //    string.IsNullOrWhiteSpace(login) ||
-            //    string.IsNullOrWhiteSpace(password) ||
-            //    string.IsNullOrWhiteSpace(passwordRepeat) ||
-            //    !dateOfBirth.HasValue ||
-            //    string.IsNullOrWhiteSpace(experience) ||
-            //    string.IsNullOrWhiteSpace(email) ||
-            //    string.IsNullOrWhiteSpace(telephone))
-            //{
-            //    MessageBox.Show("Пожалуйста, заполните все поля.", "Уведомление", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //    return;
-            //}
+            if (Applications.AppConnect.model01.doctors.Any(x => x.login == login))
+            {
+                MessageBox.Show("Пользователь с таким логином уже существует!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
-            //if (ApplicationData.AppConnect.model01.Authors.Count(x => x.Login == TBLogin.Text) > 0)
-            //{
-            //    MessageBox.Show("Пользователь с таким логином уже существует!", "Уведомление",
-            //                    MessageBoxButton.OK, MessageBoxImage.Information);
-            //    return;
-            //}
+            try
+            {
+                var userRole = Applications.AppConnect.model01.roles.FirstOrDefault(r => r.role_name == "user");
 
-            //try
-            //{
-            //    Authors userObj = new Authors
-            //    {
-            //        AuthorName = authorName,
-            //        Login = login,
-            //        Password = password,
-            //        DateOfBirth = dateOfBirth.Value,
-            //        Experience = experience,
-            //        Email = email,
-            //        Telephone = telephone
-            //    };
-            //    AppConnect.model01.Authors.Add(userObj);
-            //    AppConnect.model01.SaveChanges();
-            //    MessageBox.Show("Данные успешно добавлены!", "Уведомление", MessageBoxButton.OK, MessageBoxImage.Information);
-            //    TBName.Clear();
-            //    TBLogin.Clear();
-            //    TBPassword.Clear();
-            //    PBpassword.Clear();
-            //    DPDateOfBirth.SelectedDate = null;
-            //    TBExperience.Clear();
-            //    TBEmail.Clear();
-            //    TBTelephone.Clear();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("Ошибка при добавлении данных: " + ex.Message, "Уведомление", MessageBoxButton.OK, MessageBoxImage.Error);
-            //}
+                if (userRole == null)
+                {
+                    MessageBox.Show("Роль 'user' не найдена в системе!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                doctors newDoctor = new doctors
+                {
+                    first_name = first_name,
+                    last_name = last_name,
+                    middle_name = middle_name,
+                    id_specialization = selectedSpecialization.id_specialization,
+                    telephone = telephone,
+                    login = login,
+                    password = password,
+                    id_role = userRole.id_role
+                };
+
+                Applications.AppConnect.model01.doctors.Add(newDoctor);
+                Applications.AppConnect.model01.SaveChanges();
+
+                MessageBox.Show("Регистрация прошла успешно!", "Уведомление", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                TBName.Clear();
+                TBSurname.Clear();
+                TBMiddleName.Clear();
+                ComboBoxSpecializations.SelectedIndex = -1;
+                TBTelephone.Clear();
+                TBLogin.Clear();
+                TBPassword.Clear();
+                PBpassword.Clear();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка при добавлении данных: " + ex.Message, "Уведомление", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         private void ButtonExit_Click(object sender, RoutedEventArgs e)
         {

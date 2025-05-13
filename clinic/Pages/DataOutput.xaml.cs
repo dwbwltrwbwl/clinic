@@ -29,6 +29,7 @@ namespace clinic.Pages
 
             allReceptions = AppConnect.model01.receptions.ToList();
             listReceptions.ItemsSource = allReceptions;
+            UpdateCounter();
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -37,6 +38,54 @@ namespace clinic.Pages
             //EditReception editPage = new EditReception(newReception);
             //editPage.RecipeUpdated += UpdateRecipeList;
             //NavigationService.Navigate(EditPage);
+        }
+
+        private void ComboSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateRecipeList();
+        }
+        private void ComboFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateRecipeList();
+        }
+        private void UpdateRecipeList()
+        {
+            var filtered = allReceptions.AsQueryable();
+
+            switch ((ComboFilter.SelectedItem as ComboBoxItem)?.Content.ToString())
+            {
+                case "Отменённые":
+                    filtered = filtered.Where(r => r.status.status_name == "Отменён");
+                    break;
+                case "Завершенные":
+                    filtered = filtered.Where(r => r.status.status_name == "Завершен");
+                    break;
+                case "Ожидаемые":
+                    filtered = filtered.Where(r => r.status.status_name == "Ожидается");
+                    break;
+            }
+
+            switch ((ComboSort.SelectedItem as ComboBoxItem)?.Content.ToString())
+            {
+                case "По дате":
+                    filtered = filtered.OrderByDescending(r => r.date_reception);
+                    break;
+                case "По статусу":
+                    filtered = filtered.OrderBy(r => r.status.status_name);
+                    break;
+            }
+
+            listReceptions.ItemsSource = filtered.ToList();
+            UpdateCounter();
+        }
+        private void UpdateCounter()
+        {
+            TextFoundCount.Text = $"Найдено: {listReceptions.Items.Count}";
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
