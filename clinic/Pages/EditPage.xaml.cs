@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,21 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace clinic
+namespace clinic.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для EditPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class EditPage : Page
     {
-        public MainWindow()
+        public EditPage()
         {
             InitializeComponent();
-
-            Applications.AppConnect.model01 = new ApplicationData.clinicEntities();
-
-            Applications.AppFrame.frmMain2 = frameMain;
-            frameMain.Navigate(new Pages.Autorization());
         }
     }
 }
