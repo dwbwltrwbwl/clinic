@@ -30,7 +30,7 @@ namespace clinic.Pages
             allReceptions = AppConnect.model01.receptions.ToList();
             listReceptions.ItemsSource = allReceptions;
             UpdateCounter();
-        }
+        } 
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
