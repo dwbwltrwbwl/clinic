@@ -34,22 +34,36 @@ namespace clinic.Pages
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            //receptions newReception = new receptions();
-            //EditReception editPage = new EditReception(newReception);
-            //editPage.RecipeUpdated += UpdateRecipeList;
-            //NavigationService.Navigate(EditPage);
+            receptions newReception = new receptions();
+            EditPage editPage = new EditPage(newReception);
+            editPage.ReceptionUpdated += UpdateReceptionList;
+            NavigationService.Navigate(new EditPage());
         }
-
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (listReceptions.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите приём!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (listReceptions.SelectedItem is receptions selectedReception)
+            {
+                EditPage editPage = new EditPage(selectedReception);
+                editPage.ReceptionUpdated += UpdateReceptionList;
+                NavigationService.Navigate(editPage);
+            }
+        }
         private void ComboSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateRecipeList();
+            UpdateReceptionList();
         }
         private void ComboFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateRecipeList();
+            UpdateReceptionList();
         }
-        private void UpdateRecipeList()
+        private void UpdateReceptionList()
         {
+            allReceptions = AppConnect.model01.receptions.ToList();
             var filtered = allReceptions.AsQueryable();
 
             switch ((ComboFilter.SelectedItem as ComboBoxItem)?.Content.ToString())
@@ -83,9 +97,5 @@ namespace clinic.Pages
             TextFoundCount.Text = $"Найдено: {listReceptions.Items.Count}";
         }
 
-        private void EditButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

@@ -18,7 +18,8 @@ namespace clinic.ApplicationData
         {
             this.receptions = new HashSet<receptions>();
         }
-    
+        public string FullName
+            => $"{first_name} {last_name} {middle_name}".Trim();
         public int id_doctor { get; set; }
         public string first_name { get; set; }
         public string last_name { get; set; }
