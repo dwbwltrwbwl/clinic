@@ -17,11 +17,13 @@ namespace clinic.ApplicationData
         public roles()
         {
             this.doctors = new HashSet<doctors>();
+            this.patients = new HashSet<patients>();
         }
     
         public int id_role { get; set; }
         public string role_name { get; set; }
     
         public virtual ICollection<doctors> doctors { get; set; }
+        public virtual ICollection<patients> patients { get; set; }
     }
 }

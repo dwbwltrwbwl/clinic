@@ -28,10 +28,10 @@ namespace clinic.Pages
             InitializeComponent();
             ButtonRegist.IsEnabled = false;
 
-            var specializations = AppConnect.model01.specializations.ToList();
-            ComboBoxSpecializations.ItemsSource = specializations;
-            ComboBoxSpecializations.DisplayMemberPath = "specialization_name";
-            ComboBoxSpecializations.SelectedValuePath = "id";
+            var sites = AppConnect.model01.site.ToList();
+            ComboBoxSite.ItemsSource = sites;
+            ComboBoxSite.DisplayMemberPath = "site_number";
+            ComboBoxSite.SelectedValuePath = "id";
         }
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
@@ -51,10 +51,13 @@ namespace clinic.Pages
         private void ButtonRegist_Click(object sender, RoutedEventArgs e)
         {
 
-            string first_name = TBName.Text;
-            string last_name = TBSurname.Text;
+            string first_name = TBSurname.Text;
+            string last_name = TBName.Text;
             string middle_name = TBMiddleName.Text;
-            var selectedSpecialization = ComboBoxSpecializations.SelectedItem as specializations;
+            DateTime? dateOfBirth = DPDateOfBirth.SelectedDate;
+            string gender = TBGender.Text;
+            string police = TBPolice.Text;
+            var selectedSite = ComboBoxSite.SelectedItem as site;
             string telephone = TBTelephone.Text;
             string login = TBLogin.Text;
             string password = TBPassword.Text;
@@ -62,11 +65,15 @@ namespace clinic.Pages
 
             if (string.IsNullOrWhiteSpace(first_name) ||
                 string.IsNullOrWhiteSpace(last_name) ||
+                string.IsNullOrWhiteSpace(middle_name) ||
+                !dateOfBirth.HasValue ||
+                string.IsNullOrWhiteSpace(gender) ||
+                string.IsNullOrWhiteSpace(police) ||
+                selectedSite == null ||
                 string.IsNullOrWhiteSpace(telephone) ||
                 string.IsNullOrWhiteSpace(login) ||
                 string.IsNullOrWhiteSpace(password) ||
-                string.IsNullOrWhiteSpace(passwordRepeat) ||
-                selectedSpecialization == null)
+                string.IsNullOrWhiteSpace(passwordRepeat))
             {
                 MessageBox.Show("Пожалуйста, заполните все обязательные поля.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -78,7 +85,8 @@ namespace clinic.Pages
                 return;
             }
 
-            if (Applications.AppConnect.model01.doctors.Any(x => x.login == login))
+            if (Applications.AppConnect.model01.doctors.Any(x => x.login == login) ||
+                Applications.AppConnect.model01.patients.Any(x => x.login == login))
             {
                 MessageBox.Show("Пользователь с таким логином уже существует!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -94,27 +102,31 @@ namespace clinic.Pages
                     return;
                 }
 
-                doctors newDoctor = new doctors
+                patients newPatient = new patients
                 {
                     first_name = first_name,
                     last_name = last_name,
                     middle_name = middle_name,
-                    id_specialization = selectedSpecialization.id_specialization,
+                    date_of_birth = dateOfBirth.Value,
+                    gender = gender,
+                    policy_number = police,
+                    id_site = selectedSite.id_site,
                     telephone = telephone,
                     login = login,
                     password = password,
                     id_role = userRole.id_role
                 };
-
-                Applications.AppConnect.model01.doctors.Add(newDoctor);
+                Applications.AppConnect.model01.patients.Add(newPatient);
                 Applications.AppConnect.model01.SaveChanges();
-
                 MessageBox.Show("Регистрация прошла успешно!", "Уведомление", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 TBName.Clear();
                 TBSurname.Clear();
                 TBMiddleName.Clear();
-                ComboBoxSpecializations.SelectedIndex = -1;
+                DPDateOfBirth.SelectedDate = null;
+                TBGender.Clear();
+                TBPolice.Clear();
+                ComboBoxSite.SelectedIndex = -1;
                 TBTelephone.Clear();
                 TBLogin.Clear();
                 TBPassword.Clear();
@@ -129,5 +141,6 @@ namespace clinic.Pages
         {
             NavigationService.Navigate(new Autorization());
         }
+
     }
 }

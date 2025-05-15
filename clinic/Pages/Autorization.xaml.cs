@@ -30,23 +30,33 @@ namespace clinic.Pages
         {
             try
             {
-                var userObj = Applications.AppConnect.model01.doctors.FirstOrDefault(x => x.login == TBLogin.Text && x.password == PBPassword.Password);
-                if (userObj == null)
+                var doctorObj = Applications.AppConnect.model01.doctors.FirstOrDefault(x => x.login == TBLogin.Text && x.password == PBPassword.Password);
+                if (doctorObj != null)
                 {
-                    MessageBox.Show("Такого пользователя нет", "Ошибка авторизации", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                else
-                {
-                    string fullName = $"{userObj.first_name} {userObj.last_name} {userObj.middle_name}";
-                    var role = Applications.AppConnect.model01.roles.FirstOrDefault(r => r.id_role == userObj.id_role)?.role_name ?? "Не определена";
+                    string fullName = $"{doctorObj.first_name} {doctorObj.last_name} {doctorObj.middle_name}";
+                    var role = Applications.AppConnect.model01.roles.FirstOrDefault(r => r.id_role == doctorObj.id_role)?.role_name ?? "Не определена";
                     MessageBox.Show($"Здравствуйте, {fullName}. Ваша роль: {role}", "Уведомление", MessageBoxButton.OK, MessageBoxImage.Information);
-                    AppConnect.id_doctor = userObj.id_doctor;
+                    AppConnect.id_doctor = doctorObj.id_doctor;
                     NavigationService.Navigate(new DataOutput());
+                    return;
                 }
+
+                var patientObj = Applications.AppConnect.model01.patients.FirstOrDefault(x => x.login == TBLogin.Text && x.password == PBPassword.Password);
+                if (patientObj != null)
+                {
+                    string fullName = $"{patientObj.first_name} {patientObj.last_name} {patientObj.middle_name}";
+                    var role = Applications.AppConnect.model01.roles.FirstOrDefault(r => r.id_role == patientObj.id_role)?.role_name ?? "Не определена";
+                    MessageBox.Show($"Здравствуйте, {fullName}. Ваша роль: {role}", "Уведомление", MessageBoxButton.OK, MessageBoxImage.Information);
+                    AppConnect.id_patient = patientObj.id_patient;
+                    NavigationService.Navigate(new DataOutputUser());
+                    return;
+                }
+
+                MessageBox.Show("Такого пользователя нет", "Ошибка авторизации", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка" + ex.Message.ToString(), "Критическая ошибка приложения", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Ошибка: " + ex.Message, "Критическая ошибка приложения", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

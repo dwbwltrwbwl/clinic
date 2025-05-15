@@ -29,9 +29,12 @@ namespace clinic.ApplicationData
         public string policy_number { get; set; }
         public Nullable<int> id_site { get; set; }
         public string telephone { get; set; }
-        public string card_number { get; set; }
+        public string login { get; set; }
+        public string password { get; set; }
+        public Nullable<int> id_role { get; set; }
     
         public virtual site site { get; set; }
         public virtual ICollection<receptions> receptions { get; set; }
+        public virtual roles roles { get; set; }
     }
 }

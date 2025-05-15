@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище clinicModel" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище clinicModel" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="diagnosis">
           <Key>
             <PropertyRef Name="id_diagnosis" />
@@ -39,7 +39,9 @@
           <Property Name="policy_number" Type="nvarchar" MaxLength="50" />
           <Property Name="id_site" Type="int" />
           <Property Name="telephone" Type="nvarchar" MaxLength="20" />
-          <Property Name="card_number" Type="nvarchar" MaxLength="50" />
+          <Property Name="login" Type="nvarchar" MaxLength="50" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" />
+          <Property Name="id_role" Type="int" />
         </EntityType>
         <EntityType Name="receptions">
           <Key>
@@ -83,16 +85,6 @@
           <Property Name="id_status" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="status_name" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
-        </EntityType>
         <Association Name="FK_doctors_roles">
           <End Role="roles" Type="Self.roles" Multiplicity="0..1" />
           <End Role="doctors" Type="Self.doctors" Multiplicity="*" />
@@ -114,6 +106,18 @@
             </Principal>
             <Dependent Role="doctors">
               <PropertyRef Name="id_specialization" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_patients_roles">
+          <End Role="roles" Type="Self.roles" Multiplicity="0..1" />
+          <End Role="patients" Type="Self.patients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roles">
+              <PropertyRef Name="id_role" />
+            </Principal>
+            <Dependent Role="patients">
+              <PropertyRef Name="id_role" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -186,7 +190,6 @@
           <EntitySet Name="site" EntityType="Self.site" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="specializations" EntityType="Self.specializations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="status" EntityType="Self.status" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_doctors_roles" Association="Self.FK_doctors_roles">
             <End Role="roles" EntitySet="roles" />
             <End Role="doctors" EntitySet="doctors" />
@@ -194,6 +197,10 @@
           <AssociationSet Name="FK_doctors_specializations" Association="Self.FK_doctors_specializations">
             <End Role="specializations" EntitySet="specializations" />
             <End Role="doctors" EntitySet="doctors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_patients_roles" Association="Self.FK_patients_roles">
+            <End Role="roles" EntitySet="roles" />
+            <End Role="patients" EntitySet="patients" />
           </AssociationSet>
           <AssociationSet Name="FK_patients_site" Association="Self.FK_patients_site">
             <End Role="site" EntitySet="site" />
@@ -216,8 +223,7 @@
             <End Role="receptions" EntitySet="receptions" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="clinicModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -259,9 +265,12 @@
           <Property Name="policy_number" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="id_site" Type="Int32" />
           <Property Name="telephone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="card_number" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="site" Relationship="Self.FK_patients_site" FromRole="patients" ToRole="site" />
           <NavigationProperty Name="receptions" Relationship="Self.FK_receptions_patients" FromRole="patients" ToRole="receptions" />
+          <Property Name="login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="id_role" Type="Int32" />
+          <NavigationProperty Name="roles" Relationship="clinicModel.FK_patients_roles" FromRole="patients" ToRole="roles" />
         </EntityType>
         <EntityType Name="receptions">
           <Key>
@@ -288,6 +297,7 @@
           <Property Name="id_role" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="role_name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="doctors" Relationship="Self.FK_doctors_roles" FromRole="roles" ToRole="doctors" />
+          <NavigationProperty Name="patients" Relationship="clinicModel.FK_patients_roles" FromRole="roles" ToRole="patients" />
         </EntityType>
         <EntityType Name="site">
           <Key>
@@ -312,16 +322,6 @@
           <Property Name="id_status" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="status_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="receptions" Relationship="Self.FK_receptions_status" FromRole="status" ToRole="receptions" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <Association Name="FK_receptions_diagnosis">
           <End Role="diagnosis" Type="Self.diagnosis" Multiplicity="0..1" />
@@ -416,7 +416,6 @@
           <EntitySet Name="site" EntityType="Self.site" />
           <EntitySet Name="specializations" EntityType="Self.specializations" />
           <EntitySet Name="status" EntityType="Self.status" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <AssociationSet Name="FK_receptions_diagnosis" Association="Self.FK_receptions_diagnosis">
             <End Role="diagnosis" EntitySet="diagnosis" />
             <End Role="receptions" EntitySet="receptions" />
@@ -445,7 +444,23 @@
             <End Role="status" EntitySet="status" />
             <End Role="receptions" EntitySet="receptions" />
           </AssociationSet>
+          <AssociationSet Name="FK_patients_roles" Association="clinicModel.FK_patients_roles">
+            <End Role="roles" EntitySet="roles" />
+            <End Role="patients" EntitySet="patients" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_patients_roles">
+          <End Type="clinicModel.roles" Role="roles" Multiplicity="0..1" />
+          <End Type="clinicModel.patients" Role="patients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roles">
+              <PropertyRef Name="id_role" />
+            </Principal>
+            <Dependent Role="patients">
+              <PropertyRef Name="id_role" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -478,6 +493,9 @@
           <EntitySetMapping Name="patients">
             <EntityTypeMapping TypeName="clinicModel.patients">
               <MappingFragment StoreEntitySet="patients">
+                <ScalarProperty Name="id_role" ColumnName="id_role" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="login" ColumnName="login" />
                 <ScalarProperty Name="id_patient" ColumnName="id_patient" />
                 <ScalarProperty Name="first_name" ColumnName="first_name" />
                 <ScalarProperty Name="last_name" ColumnName="last_name" />
@@ -487,7 +505,6 @@
                 <ScalarProperty Name="policy_number" ColumnName="policy_number" />
                 <ScalarProperty Name="id_site" ColumnName="id_site" />
                 <ScalarProperty Name="telephone" ColumnName="telephone" />
-                <ScalarProperty Name="card_number" ColumnName="card_number" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -535,17 +552,6 @@
               <MappingFragment StoreEntitySet="status">
                 <ScalarProperty Name="id_status" ColumnName="id_status" />
                 <ScalarProperty Name="status_name" ColumnName="status_name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="clinicModel.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

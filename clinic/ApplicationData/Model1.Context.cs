@@ -33,6 +33,5 @@ namespace clinic.ApplicationData
         public DbSet<site> site { get; set; }
         public DbSet<specializations> specializations { get; set; }
         public DbSet<status> status { get; set; }
-        public DbSet<sysdiagrams> sysdiagrams { get; set; }
     }
 }

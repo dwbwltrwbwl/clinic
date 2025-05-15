@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="2498bdc8f0904e3ba5f99f711519da35" Name="Diagram1">
+      <Diagram DiagramId="b13de6d3d8fa47e7bcbaa70ca3e03040" Name="Diagram1">
         <EntityTypeShape EntityType="clinicModel.diagnosis" Width="1.5" PointX="3" PointY="6.125" IsExpanded="true" />
         <EntityTypeShape EntityType="clinicModel.doctors" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="clinicModel.patients" Width="1.5" PointX="3" PointY="8.5" IsExpanded="true" />
@@ -13,7 +13,6 @@
         <EntityTypeShape EntityType="clinicModel.site" Width="1.5" PointX="0.75" PointY="9.375" IsExpanded="true" />
         <EntityTypeShape EntityType="clinicModel.specializations" Width="1.5" PointX="0.75" PointY="6" IsExpanded="true" />
         <EntityTypeShape EntityType="clinicModel.status" Width="1.5" PointX="3" PointY="12.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="clinicModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
         <AssociationConnector Association="clinicModel.FK_receptions_diagnosis" ManuallyRouted="false" />
         <AssociationConnector Association="clinicModel.FK_doctors_roles" ManuallyRouted="false" />
         <AssociationConnector Association="clinicModel.FK_doctors_specializations" ManuallyRouted="false" />
@@ -21,6 +20,7 @@
         <AssociationConnector Association="clinicModel.FK_patients_site" ManuallyRouted="false" />
         <AssociationConnector Association="clinicModel.FK_receptions_patients" ManuallyRouted="false" />
         <AssociationConnector Association="clinicModel.FK_receptions_status" ManuallyRouted="false" />
+        <AssociationConnector Association="clinicModel.FK_patients_roles" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

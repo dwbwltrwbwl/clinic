@@ -10,6 +10,7 @@ namespace clinic.Applications
     internal class AppConnect
     {
         public static int id_doctor;
+        public static int id_patient;
         public static clinicEntities model01;
     }
 }
