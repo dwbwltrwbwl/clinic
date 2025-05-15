@@ -33,8 +33,8 @@ namespace clinic.ApplicationData
         public string password { get; set; }
         public Nullable<int> id_role { get; set; }
     
+        public virtual roles roles { get; set; }
         public virtual site site { get; set; }
         public virtual ICollection<receptions> receptions { get; set; }
-        public virtual roles roles { get; set; }
     }
 }
