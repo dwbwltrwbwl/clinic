@@ -21,7 +21,7 @@
         <ListView x:Name="listDoctors" Grid.Row="1" ToolTip="Список врачей" Background="#ffdbd6">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Фото" Width="220">
+                    <GridViewColumn Header="Фото" Width="140">
                         <GridViewColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="Фото" 
@@ -31,14 +31,19 @@
                         </GridViewColumn.HeaderTemplate>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                    <Image Width="50" Height="100" Grid.Column="0" Source="{Binding CurrentPhoto}"></Image>
-                                </StackPanel>
+                                <Border Width="130" Height="130" 
+                                        CornerRadius="5"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center">
+                                    <Image Source="{Binding CurrentPhoto}"
+                                        Stretch="UniformToFill" 
+                                        RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </Border>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="Врач" Width="250">
+                    <GridViewColumn Header="Врач" Width="200">
                         <GridViewColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="Врач" 
@@ -62,7 +67,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="Специализация" Width="250">
+                    <GridViewColumn Header="Специализация" Width="200">
                         <GridViewColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="Специализация" 

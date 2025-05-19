@@ -133,26 +133,30 @@
                         </GridViewColumn.HeaderTemplate>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding status.status_name}" 
-                       FontSize="14"
-                       VerticalAlignment="Center">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Foreground" Value="Black"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding status.status_name}" Value="Отменён">
-                                                    <Setter Property="Foreground" Value="Red"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding status.status_name}" Value="Завершен">
-                                                    <Setter Property="Foreground" Value="DarkGreen"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding status.status_name}" Value="Ожидается">
-                                                    <Setter Property="Foreground" Value="Gold"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
+                                <Border Background="White" 
+                                        CornerRadius="3"
+                                        Padding="4,5">
+                                    <TextBlock Text="{Binding status.status_name}" 
+                                               FontSize="14"
+                                               VerticalAlignment="Center">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="Black"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding status.status_name}" Value="Отменён">
+                                                        <Setter Property="Foreground" Value="Red"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding status.status_name}" Value="Завершен">
+                                                        <Setter Property="Foreground" Value="Green"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding status.status_name}" Value="Ожидается">
+                                                        <Setter Property="Foreground" Value="Gold"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Border>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
