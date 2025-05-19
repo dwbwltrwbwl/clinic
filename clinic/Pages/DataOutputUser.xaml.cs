@@ -29,25 +29,8 @@ namespace clinic.Pages
             InitializeComponent();
 
             allDoctors = AppConnect.model01.doctors.ToList();
-            InitializeFilters();
             listDoctors.ItemsSource = allDoctors;
             UpdateCounter();
-        }
-        private void InitializeFilters()
-        {
-            specializations = allDoctors
-                .Select(d => d.specializations.specialization_name)
-                .Distinct()
-                .OrderBy(s => s)
-                .ToList();
-
-            ComboFilter.Items.Clear();
-            ComboFilter.Items.Add("Все записи");
-            foreach (var spec in specializations)
-            {
-                ComboFilter.Items.Add(spec);
-            }
-            ComboFilter.SelectedIndex = 0;
         }
         private void MyReceptions_Click(object sender, RoutedEventArgs e)
         {
@@ -64,14 +47,6 @@ namespace clinic.Pages
         private void UpdateReceptionList()
         {
             var filteredDoctors = allDoctors.AsQueryable();
-
-            if (ComboFilter.SelectedItem is string selectedSpec && selectedSpec != "Все записи")
-            {
-                filteredDoctors = filteredDoctors
-                    .Where(d => d.specializations.specialization_name == selectedSpec);
-            }
-
-            //сортировка
 
             listDoctors.ItemsSource = filteredDoctors.ToList();
             UpdateCounter();

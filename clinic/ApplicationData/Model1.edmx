@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище clinicModel" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище clinicModel" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="diagnosis">
           <Key>
             <PropertyRef Name="id_diagnosis" />
@@ -25,6 +25,7 @@
           <Property Name="id_role" Type="int" />
           <Property Name="login" Type="nvarchar" MaxLength="50" />
           <Property Name="password" Type="nvarchar" MaxLength="50" />
+          <Property Name="image" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="patients">
           <Key>
@@ -223,8 +224,7 @@
             <End Role="receptions" EntitySet="receptions" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="clinicModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -252,6 +252,7 @@
           <NavigationProperty Name="roles" Relationship="Self.FK_doctors_roles" FromRole="doctors" ToRole="roles" />
           <NavigationProperty Name="specializations" Relationship="Self.FK_doctors_specializations" FromRole="doctors" ToRole="specializations" />
           <NavigationProperty Name="receptions" Relationship="Self.FK_receptions_doctors" FromRole="doctors" ToRole="receptions" />
+          <Property Name="image" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="patients">
           <Key>
@@ -479,6 +480,7 @@
           <EntitySetMapping Name="doctors">
             <EntityTypeMapping TypeName="clinicModel.doctors">
               <MappingFragment StoreEntitySet="doctors">
+                <ScalarProperty Name="image" ColumnName="image" />
                 <ScalarProperty Name="id_doctor" ColumnName="id_doctor" />
                 <ScalarProperty Name="first_name" ColumnName="first_name" />
                 <ScalarProperty Name="last_name" ColumnName="last_name" />

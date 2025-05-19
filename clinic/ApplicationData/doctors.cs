@@ -18,6 +18,16 @@ namespace clinic.ApplicationData
         {
             this.receptions = new HashSet<receptions>();
         }
+        public string CurrentPhoto
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(image) || String.IsNullOrWhiteSpace(image))
+                    return @"/Images/nofoto.jpg";
+                else
+                    return @"/Images/" + image;
+            }
+        }
         public string FullName
             => $"{first_name} {last_name} {middle_name}".Trim();
         public int id_doctor { get; set; }
@@ -29,6 +39,7 @@ namespace clinic.ApplicationData
         public Nullable<int> id_role { get; set; }
         public string login { get; set; }
         public string password { get; set; }
+        public string image { get; set; }
     
         public virtual roles roles { get; set; }
         public virtual specializations specializations { get; set; }
