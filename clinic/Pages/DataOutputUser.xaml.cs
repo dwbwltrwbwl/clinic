@@ -60,5 +60,10 @@ namespace clinic.Pages
         {
             TextFoundCount.Text = $"Найдено: {listDoctors.Items.Count}";
         }
+
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Autorization());
+        }
     }
 }

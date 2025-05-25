@@ -98,6 +98,7 @@
             <Button Content="Мои записи" Width="140" Height="24" Click="MyReceptions_Click" ToolTip="Добавить" Grid.Column="0" HorizontalAlignment="Left" FontSize="14"/>
             <Button Content="Записаться" Width="140" Height="24" Click="AddReceptions_Click" ToolTip="Добавить" HorizontalAlignment="Left" FontSize="14" Grid.Column="1" Margin="10,0,0,0"/>
             <TextBlock x:Name="TextFoundCount" Text="Найдено: 0" Margin="10,0,0,0" VerticalAlignment="Center" Grid.Column="2"/>
+            <Button Content="Выйти" Width="90" Height="24" Click="ExitButton_Click" ToolTip="Выйти" Grid.Column="1" HorizontalAlignment="Left" FontSize="14" Margin="160,0,0,0"/>
         </Grid>
     </Grid>
 </Page>

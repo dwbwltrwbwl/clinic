@@ -2,6 +2,7 @@
 using clinic.Applications;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,21 +24,36 @@ namespace clinic.Pages
     public partial class DataOutput : Page
     {
         private List<receptions> allReceptions;
+        private int currentDoctorId;
+
         public DataOutput()
         {
             InitializeComponent();
 
-            allReceptions = AppConnect.model01.receptions.ToList();
-            listReceptions.ItemsSource = allReceptions;
+            currentDoctorId = AppConnect.id_doctor;
+            LoadData();
             UpdateCounter();
-        } 
+        }
+
+        private void LoadData()
+        {
+            allReceptions = AppConnect.model01.receptions
+                .Where(x => x.id_doctor == currentDoctorId)
+                .Include(r => r.status)
+                .ToList();
+
+            listReceptions.ItemsSource = allReceptions;
+        }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            receptions newReception = new receptions();
+            receptions newReception = new receptions
+            {
+                id_doctor = currentDoctorId
+            };
             EditPage editPage = new EditPage(newReception);
             editPage.ReceptionUpdated += UpdateReceptionList;
-            NavigationService.Navigate(new EditPage());
+            NavigationService.Navigate(editPage);
         }
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
@@ -63,8 +79,11 @@ namespace clinic.Pages
         }
         private void UpdateReceptionList()
         {
-            allReceptions = AppConnect.model01.receptions.ToList();
-            var filtered = allReceptions.AsQueryable();
+            var baseQuery = AppConnect.model01.receptions
+                .Where(x => x.id_doctor == currentDoctorId)
+                .Include(r => r.status);
+
+            var filtered = baseQuery.AsQueryable();
 
             switch ((ComboFilter.SelectedItem as ComboBoxItem)?.Content.ToString())
             {
@@ -97,5 +116,9 @@ namespace clinic.Pages
             TextFoundCount.Text = $"Найдено: {listReceptions.Items.Count}";
         }
 
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Autorization());
+        }
     }
 }
