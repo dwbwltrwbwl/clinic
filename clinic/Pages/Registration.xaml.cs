@@ -32,6 +32,8 @@ namespace clinic.Pages
             ComboBoxSite.ItemsSource = sites;
             ComboBoxSite.DisplayMemberPath = "site_number";
             ComboBoxSite.SelectedValuePath = "id";
+            CBGender.Items.Add("Мужской");
+            CBGender.Items.Add("Женский");
         }
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
@@ -55,7 +57,7 @@ namespace clinic.Pages
             string last_name = TBName.Text;
             string middle_name = TBMiddleName.Text;
             DateTime? dateOfBirth = DPDateOfBirth.SelectedDate;
-            string gender = TBGender.Text;
+            string gender = CBGender.SelectedItem as string;
             string police = TBPolice.Text;
             var selectedSite = ComboBoxSite.SelectedItem as site;
             string telephone = TBTelephone.Text;
@@ -124,7 +126,7 @@ namespace clinic.Pages
                 TBSurname.Clear();
                 TBMiddleName.Clear();
                 DPDateOfBirth.SelectedDate = null;
-                TBGender.Clear();
+                CBGender.SelectedIndex = -1;
                 TBPolice.Clear();
                 ComboBoxSite.SelectedIndex = -1;
                 TBTelephone.Clear();
@@ -136,6 +138,51 @@ namespace clinic.Pages
             {
                 MessageBox.Show("Ошибка при добавлении данных: " + ex.Message, "Уведомление", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!char.IsLetter(e.Text, 0) &&
+                e.Text != " " &&
+                e.Text != "-" &&
+                e.Text != "'")
+            {
+                e.Handled = true;
+            }
+        }
+        private void TBTelephone_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!char.IsDigit(e.Text, 0))
+            {
+                e.Handled = true;
+                return;
+            }
+            string currentText = TBTelephone.Text.Replace("+7 (", "").Replace(")", "").Replace("-", "").Replace(" ", "");
+            if (currentText.Length >= 11)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void TBTelephone_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string digitsOnly = new string(TBTelephone.Text.Where(char.IsDigit).ToArray());
+            if (digitsOnly.Length > 0 && digitsOnly[0] != '7' && digitsOnly[0] != '8')
+            {
+                digitsOnly = "7" + digitsOnly;
+            }
+            string formattedPhone = "+7 (";
+            if (digitsOnly.Length > 1)
+                formattedPhone += digitsOnly.Substring(1, Math.Min(3, digitsOnly.Length - 1));
+            if (digitsOnly.Length > 4)
+                formattedPhone += ") " + digitsOnly.Substring(4, Math.Min(3, digitsOnly.Length - 4));
+            if (digitsOnly.Length > 7)
+                formattedPhone += "-" + digitsOnly.Substring(7, Math.Min(2, digitsOnly.Length - 7));
+            if (digitsOnly.Length > 9)
+                formattedPhone += "-" + digitsOnly.Substring(9, Math.Min(2, digitsOnly.Length - 9));
+            TBTelephone.TextChanged -= TBTelephone_TextChanged;
+            TBTelephone.Text = formattedPhone;
+            TBTelephone.CaretIndex = formattedPhone.Length;
+            TBTelephone.TextChanged += TBTelephone_TextChanged;
         }
         private void ButtonExit_Click(object sender, RoutedEventArgs e)
         {

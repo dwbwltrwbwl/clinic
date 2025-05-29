@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:clinic.Pages"
+      xmlns:System="clr-namespace:System;assembly=mscorlib"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AddReception">
@@ -39,7 +40,8 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Дата:" FontWeight="Bold" FontSize="14" Grid.Row="0"/>
-                        <DatePicker x:Name="EditDate" FontSize="14" Grid.Row="1" Margin="0,5" HorizontalAlignment="Left" Height="24" Width="300"/>
+                        <DatePicker x:Name="EditDate" FontSize="14" Grid.Row="1" Margin="0,5" HorizontalAlignment="Left" Height="24" Width="300" DisplayDateStart="{x:Static System:DateTime.Now}" 
+                SelectedDate="{x:Static System:DateTime.Now}"/>
                     </Grid>
 
                     <Grid Margin="0,5">

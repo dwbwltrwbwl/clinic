@@ -116,6 +116,16 @@ namespace clinic.Pages
             TextFoundCount.Text = $"Найдено: {listReceptions.Items.Count}";
         }
 
+        //private void FillComboStatus()
+        //{
+        //    var statuses = AppConnect.model01.status.ToList();
+        //    foreach (var item in statuses) {
+        //        ComboFilter.Items.Add(item.status_name);
+        //    }
+        //    ComboFilter.SelectedIndex = 0;
+        //    MessageBox.Show("Combo filled");
+        //}
+
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Autorization());

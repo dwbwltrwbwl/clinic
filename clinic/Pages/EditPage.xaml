@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:clinic.Pages"
+      xmlns:System="clr-namespace:System;assembly=mscorlib"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="EditPage">
@@ -41,7 +42,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Дата:" FontWeight="Bold" FontSize="14" Grid.Row="0"/>
-                        <DatePicker x:Name="EditDate" FontSize="14" Grid.Row="1" Margin="0,5" HorizontalAlignment="Left" Height="24" Width="300"/>
+                        <DatePicker x:Name="EditDate" FontSize="14" Grid.Row="1" Margin="0,5" HorizontalAlignment="Left" Height="24" Width="300" DisplayDateStart="{x:Static System:DateTime.Now}"  SelectedDate="{x:Static System:DateTime.Now}"/>
                     </Grid>
 
                     <Grid Margin="0,5">
@@ -50,7 +51,8 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Время:" FontWeight="Bold" FontSize="14" Grid.Row="0"/>
-                        <TextBox x:Name="EditTime" Width="300" Margin="0,5" Grid.Row="1" HorizontalAlignment="Left" FontSize="14" Height="24"/>
+                        <TextBox x:Name="EditTime" Width="300" Margin="0,5" Grid.Row="1" HorizontalAlignment="Left" FontSize="14" Height="24" PreviewTextInput="EditTime_PreviewTextInput"
+             TextChanged="EditTime_TextChanged"/>
                     </Grid>
 
                     <Grid Margin="0,5">
@@ -70,7 +72,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Симптомы:" FontWeight="Bold" FontSize="14" Grid.Row="0"/>
-                        <TextBox x:Name="EditSymptom" Width="300" Margin="0,5" Grid.Row="1" HorizontalAlignment="Left" FontSize="14" 
+                        <TextBox x:Name="EditSymptom" Width="300" Margin="0,5" Grid.Row="1" HorizontalAlignment="Left" FontSize="14" MaxLength="100"
                          AcceptsReturn="True" TextWrapping="Wrap" Height="86"/>
                     </Grid>
 
@@ -89,7 +91,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Лечение:" FontWeight="Bold" FontSize="14" Grid.Row="0"/>
-                        <TextBox x:Name="EditTreatment" Width="300" Margin="0,5" Grid.Row="1" HorizontalAlignment="Left" FontSize="14" 
+                        <TextBox x:Name="EditTreatment" Width="300" Margin="0,5" Grid.Row="1" HorizontalAlignment="Left" FontSize="14" MaxLength="100"
                          AcceptsReturn="True" TextWrapping="Wrap" Height="86"/>
                     </Grid>
                 </StackPanel>

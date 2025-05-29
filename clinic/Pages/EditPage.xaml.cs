@@ -144,7 +144,40 @@ namespace clinic.Pages
                               MessageBoxImage.Error);
             }
         }
+        private void EditTime_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // Разрешаем ввод только цифр и двоеточия
+            if (!char.IsDigit(e.Text, 0) && e.Text != ":")
+            {
+                e.Handled = true;
+            }
+        }
+        private void EditTime_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Получаем текущее значение текста
+            string text = EditTime.Text;
 
+            // Удаляем все символы, кроме цифр и двоеточия
+            text = new string(text.Where(c => char.IsDigit(c) || c == ':').ToArray());
+
+            // Проверяем, соответствует ли текст формату времени
+            if (text.Length > 5)
+            {
+                text = text.Substring(0, 5); // Ограничиваем длину до 5 символов (HH:mm)
+            }
+
+            // Форматируем текст
+            if (text.Length >= 3 && text[2] != ':')
+            {
+                text = text.Insert(2, ":"); // Вставляем двоеточие после часов
+            }
+
+            // Обновляем текст в TextBox
+            EditTime.TextChanged -= EditTime_TextChanged; // Отключаем обработчик, чтобы избежать зацикливания
+            EditTime.Text = text;
+            EditTime.CaretIndex = text.Length; // Устанавливаем курсор в конец текста
+            EditTime.TextChanged += EditTime_TextChanged; // Включаем обработчик обратно
+        }
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new DataOutput());
